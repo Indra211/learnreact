@@ -1,28 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Form() {
-  const [showForm, setShowForm] = useState(true);
+  const [showForm, setShowForm] = useState(false);
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    if (!showForm) {
-      sendMessage(message);
-    }
-  }, [showForm, message]);
 
   function handleSubmit(e) {
     e.preventDefault();
-    setShowForm(false);
+    setShowForm(true);
+    sendMessage(message)
   }
 
-  if (!showForm) {
+  if (showForm) {
     return (
       <>
         <h1>Thanks for using our services!</h1>
         <button
           onClick={() => {
             setMessage("");
-            setShowForm(true);
+            setShowForm(false);
           }}
         >
           Open chat

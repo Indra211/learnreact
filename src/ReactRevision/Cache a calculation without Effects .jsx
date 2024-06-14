@@ -22,21 +22,21 @@ export const initialTodos = [
   createTodo("Get carrots"),
 ];
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function TodoList() {
   const [todos, setTodos] = useState(initialTodos);
   const [showActive, setShowActive] = useState(false);
   const [text, setText] = useState("");
-  const [visibleTodos, setVisibleTodos] = useState([]);
+  const [visibleTodos, setVisibleTodos] = useState(initialTodos);
 
-  useEffect(() => {
+  const handleVisibleTodos = (todos, showActive) => {
     setVisibleTodos(getVisibleTodos(todos, showActive));
-  }, [todos, showActive]);
-
+  }
   function handleAddClick() {
     setText("");
     setTodos([...todos, createTodo(text)]);
+    handleVisibleTodos([...todos, createTodo(text)], showActive)
   }
 
   return (
@@ -45,7 +45,10 @@ export default function TodoList() {
         <input
           type="checkbox"
           checked={showActive}
-          onChange={(e) => setShowActive(e.target.checked)}
+          onChange={(e) => {
+            setShowActive(e.target.checked)
+            handleVisibleTodos(todos, e.target.checked)
+          }}
         />
         Show only active todos
       </label>

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 let nextId = 0;
 
 export function createTodo(text, completed = false) {
@@ -14,27 +15,13 @@ export const initialTodos = [
   createTodo("Get carrots"),
 ];
 
-import { useState, useEffect } from "react";
 
-export default function TodoList() {
+
+export default function TodoList1() {
   const [todos, setTodos] = useState(initialTodos);
   const [showActive, setShowActive] = useState(false);
-  const [activeTodos, setActiveTodos] = useState([]);
-  const [visibleTodos, setVisibleTodos] = useState([]);
-  const [footer, setFooter] = useState(null);
-
-  useEffect(() => {
-    setActiveTodos(todos.filter((todo) => !todo.completed));
-  }, [todos]);
-
-  useEffect(() => {
-    setVisibleTodos(showActive ? activeTodos : todos);
-  }, [showActive, todos, activeTodos]);
-
-  useEffect(() => {
-    setFooter(<footer>{activeTodos.length} todos left</footer>);
-  }, [activeTodos]);
-
+  const activeTodos = todos.filter((todo) => !todo.completed)
+  const visibleTodos = showActive ? activeTodos : todos
   return (
     <>
       <label>
@@ -47,13 +34,14 @@ export default function TodoList() {
       </label>
       <NewTodo onAdd={(newTodo) => setTodos([...todos, newTodo])} />
       <ul>
+
         {visibleTodos.map((todo) => (
           <li key={todo.id}>
             {todo.completed ? <s>{todo.text}</s> : todo.text}
           </li>
         ))}
       </ul>
-      {footer}
+      <footer>{activeTodos.length} todos left</footer>
     </>
   );
 }
